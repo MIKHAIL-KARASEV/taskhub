@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-//Для работы со swagger --
+// Для работы со swagger --
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //--
@@ -16,7 +16,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    //Для работы со swagger --
+    // Для работы со swagger --
     app.UseSwagger();
     app.UseSwaggerUI();
     //--
@@ -31,13 +31,11 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
+    var forecast = Enumerable.Range(1, 5)
+        .Select(index => new WeatherForecast(
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
             Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
+            summaries[Random.Shared.Next(summaries.Length)]))
         .ToArray();
     return forecast;
 })
@@ -45,7 +43,7 @@ app.MapGet("/weatherforecast", () =>
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+record WeatherForecast(DateOnly date, int temperatureC, string? summary)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public int TemperatureF => 32 + (int)(temperatureC / 0.5556);
 }

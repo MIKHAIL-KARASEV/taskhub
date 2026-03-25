@@ -1,0 +1,25 @@
+root = true
+
+[*.cs]
+
+# ❌ отключаем шум
+dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1512.severity = none
+dotnet_diagnostic.SA1515.severity = none
+dotnet_diagnostic.SA1516.severity = none
+dotnet_diagnostic.SA1110.severity = none
+dotnet_diagnostic.SA1111.severity = none
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1649.severity = none
+
+# ⚠️ опционально
+dotnet_diagnostic.SA1413.severity = none
+
+# ✅ оставляем полезное
+dotnet_diagnostic.SA1005.severity = warning
+dotnet_diagnostic.SA1009.severity = warning
+dotnet_diagnostic.SA1025.severity = warning
+dotnet_diagnostic.SA1313.severity = warning
+dotnet_diagnostic.SA1505.severity = warning
+dotnet_diagnostic.SA1508.severity = warning
