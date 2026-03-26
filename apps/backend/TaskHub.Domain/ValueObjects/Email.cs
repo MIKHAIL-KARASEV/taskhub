@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 public sealed class Email : IEquatable<Email>
 {
     private static readonly Regex EmailRegex =
-        new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
+        new (@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
 
     public string Value { get; }
 
@@ -17,12 +17,16 @@ public sealed class Email : IEquatable<Email>
     public static Email Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
+        {
             throw new ArgumentException("Email is required");
+        }
 
         value = value.Trim().ToLowerInvariant();
 
         if (!EmailRegex.IsMatch(value))
+        {
             throw new ArgumentException("Invalid email");
+        }
 
         return new Email(value);
     }
@@ -32,7 +36,11 @@ public sealed class Email : IEquatable<Email>
 
     public bool Equals(Email? other)
     {
-        if (other is null) return false;
+        if (other is null)
+        {
+            return false;
+        }
+
         return Value == other.Value;
     }
 
