@@ -27,10 +27,14 @@ public class User
     public static User Create(Email email, string passwordHash)
     {
         if (email is null)
+        {
             throw new ArgumentNullException(nameof(email));
+        }
 
         if (string.IsNullOrWhiteSpace(passwordHash))
+        {
             throw new ArgumentException("Password hash cannot be empty");
+        }
 
         return new User(email, passwordHash);
     }
@@ -38,7 +42,9 @@ public class User
     public void PromoteToAdmin()
     {
         if (Role == UserRole.Admin)
+        {
             return;
+        }
 
         Role = UserRole.Admin;
     }
