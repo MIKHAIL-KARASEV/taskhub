@@ -12,6 +12,7 @@ dotnet_diagnostic.SA1111.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1649.severity = none
+dotnet_diagnostic.SA1200.severity = none
 
 # ⚠️ опционально
 dotnet_diagnostic.SA1413.severity = none
