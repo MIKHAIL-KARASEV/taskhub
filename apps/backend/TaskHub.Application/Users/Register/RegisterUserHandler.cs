@@ -20,37 +20,33 @@ public sealed class RegisterUserHandler
 
     public async Task<Guid> Handle(RegisterUserCommand command, CancellationToken ct)
     {
-        // 1. Простейшая валидация (Application уровень)
-        if (string.IsNullOrWhiteSpace(command.password))
-        {
-            throw new ArgumentException("Password is required");
-        }
+        // 1. Создаём Value Object (Domain validation)
+        var email = Email.Create(command.Email);
 
-        if (command.password.Length < 6)
-        {
-            throw new ArgumentException("Password too short");
-        }
-
-        // 2. Создаём Value Object (Domain уровень)
-        var email = Email.Create(command.email);
-
-        // 3. Проверка (UX, не гарантия)
-        var exists = await userRepository.ExistsByEmailAsync(email, ct);
-        if (exists)
+        // 2. Проверяем существование
+        var existingUser = await userRepository.GetByEmailAsync(email, ct);
+        if (existingUser is not null)
         {
             throw new UserAlreadyExistsException();
         }
 
-        // 4. Хешируем пароль
-        var passwordHash = passwordHasher.Hash(command.password);
+        // 3. Хешируем пароль
+        var passwordHash = passwordHasher.Hash(command.Password);
 
-        // 5. Создаём пользователя (через Domain!)
-        var user = User.Create(email, passwordHash);
+        // 4. Создаём пользователя (Domain)
+        var user = User.CreateUser(email, passwordHash);
 
-        // 6. Сохраняем
-        await userRepository.AddAsync(user, ct);
+        // 5. Сохраняем (с защитой от race condition)
+        try
+        {
+            await userRepository.AddAsync(user, ct);
+        }
+        catch (Exception)
+        {
+            // позже заменим на конкретный DB exception
+            throw new UserAlreadyExistsException();
+        }
 
-        // 7. Возвращаем результат
         return user.Id;
     }
 }
