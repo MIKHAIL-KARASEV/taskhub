@@ -2,6 +2,7 @@ namespace TaskHub.Domain.Entities;
 
 using TaskHub.Domain.ValueObjects;
 using TaskHub.Domain.Enums;
+using TaskHub.Domain.Common.Exceptions;
 
 public class User
 {
@@ -24,16 +25,21 @@ public class User
     public UserRole Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public static User Create(Email email, string passwordHash)
+    public static User CreateUser(Email email, string passwordHash)
     {
         if (email is null)
         {
-            throw new ArgumentNullException(nameof(email));
+            throw new DomainException("Email is required");
         }
 
         if (string.IsNullOrWhiteSpace(passwordHash))
         {
-            throw new ArgumentException("Password hash cannot be empty");
+            throw new DomainException("Password hash is required");
+        }
+
+        if (passwordHash.Length < 20)
+        {
+            throw new DomainException("Invalid password hash");
         }
 
         return new User(email, passwordHash);
@@ -43,7 +49,7 @@ public class User
     {
         if (Role == UserRole.Admin)
         {
-            return;
+            throw new DomainException("User is already admin");
         }
 
         Role = UserRole.Admin;

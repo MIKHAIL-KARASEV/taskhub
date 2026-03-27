@@ -1,5 +1,7 @@
 namespace TaskHub.Application.Users.Register;
 
-public sealed record RegisterUserCommand(
-    string email,
-    string password);
+public sealed class RegisterUserCommand
+{
+    public string Email { get; init; } = null!;
+    public string Password { get; init; } = null!;
+}
