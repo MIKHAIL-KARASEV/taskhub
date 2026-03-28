@@ -6,18 +6,44 @@ namespace TaskHub.Infrastructure.Security;
 
 public class PasswordHasher : IPasswordHasher
 {
+    private const int SaltSize = 16; // 128 bit
+    private const int KeySize = 32;  // 256 bit
+    private const int Iterations = 100_000;
+
     public string Hash(string password)
-    {
-        if (string.IsNullOrWhiteSpace(password))
         {
-            throw new ArgumentException("Password is required");
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Password is required");
+
+            var salt = RandomNumberGenerator.GetBytes(SaltSize);
+
+            var hash = Rfc2898DeriveBytes.Pbkdf2(
+                password,
+                salt,
+                Iterations,
+                HashAlgorithmName.SHA256,
+                KeySize);
+
+            return $"{Convert.ToBase64String(salt)}.{Convert.ToBase64String(hash)}";
         }
 
-        using var sha256 = SHA256.Create();
+    public bool Verify(string password, string storedHash)
+        {
+            var parts = storedHash.Split('.');
 
-        var bytes = Encoding.UTF8.GetBytes(password);
-        var hash = sha256.ComputeHash(bytes);
+            if (parts.Length != 2)
+                return false;
 
-        return Convert.ToBase64String(hash);
-    }
+            var salt = Convert.FromBase64String(parts[0]);
+            var hash = Convert.FromBase64String(parts[1]);
+
+            var inputHash = Rfc2898DeriveBytes.Pbkdf2(
+                password,
+                salt,
+                Iterations,
+                HashAlgorithmName.SHA256,
+                KeySize);
+
+            return CryptographicOperations.FixedTimeEquals(hash, inputHash);
+        }
 }
