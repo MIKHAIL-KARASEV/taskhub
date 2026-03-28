@@ -21,9 +21,13 @@ public static class DependencyInjection
         services.Configure<JwtOptions>(
             configuration.GetSection("Jwt"));
 
+        services.AddHttpContextAccessor();
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IUserTaskRepository, UserTaskRepository>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
 
         return services;
     }
