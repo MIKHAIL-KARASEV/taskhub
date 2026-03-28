@@ -30,9 +30,16 @@ public class LoginUserHandler
 
         var passwordHash = passwordHasher.Hash(command.Password);
 
-        if (user.PasswordHash != passwordHash)
+        var isValid = passwordHasher.Verify(command.Password, user.PasswordHash);
+
+        if (!isValid)
             throw new Exception("Invalid credentials");
 
-        return jwtProvider.GenerateToken(user.Id, user.Email.Value);
+        var token = jwtProvider.GenerateToken(
+            user.Id,
+            user.Email,
+            user.Role);
+
+        return token;
     }
 }
