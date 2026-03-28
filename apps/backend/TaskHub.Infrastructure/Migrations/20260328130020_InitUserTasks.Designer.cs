@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskHub.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TaskHub.Infrastructure.Persistence;
 namespace TaskHub.Infrastructure.Migrations
 {
     [DbContext(typeof(TaskHubDbContext))]
-    partial class TaskHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260328130020_InitUserTasks")]
+    partial class InitUserTasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,14 +47,11 @@ namespace TaskHub.Infrastructure.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("UserTask", b =>
+            modelBuilder.Entity("TaskHub.Domain.Entities.UserTask", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -59,9 +59,6 @@ namespace TaskHub.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Title")
                         .IsRequired()
