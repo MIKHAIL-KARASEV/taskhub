@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskHub.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TaskHub.Infrastructure.Persistence;
 namespace TaskHub.Infrastructure.Migrations
 {
     [DbContext(typeof(TaskHubDbContext))]
-    partial class TaskHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260328151106_AddCompletedAtToUserTasks")]
+    partial class AddCompletedAtToUserTasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
