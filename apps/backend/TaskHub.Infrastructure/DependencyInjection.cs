@@ -7,6 +7,7 @@ using TaskHub.Application.Abstractions;
 using TaskHub.Infrastructure.Persistence;
 using TaskHub.Infrastructure.Repositories;
 using TaskHub.Infrastructure.Security;
+using TaskHub.Application.Auth;
 
 public static class DependencyInjection
 {
@@ -17,8 +18,12 @@ public static class DependencyInjection
         services.AddDbContext<TaskHubDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Default")));
 
+        services.Configure<JwtOptions>(
+            configuration.GetSection("Jwt"));
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
 
         return services;
     }
