@@ -1,9 +1,27 @@
+import { useState } from "react";
 import { createTask } from "@/entities/userTask/api/userTask.api";
 
-export function useCreateUserTask() {
-    const mutate = async (title: string, description?: string) => {
-        return createTask({ title, description });
+export const useCreateUserTask = () => {
+    const [loading, setLoading] = useState(false);
+
+    const mutate = async (params: {
+        title: string;
+        description?: string;
+    }) => {
+        try {
+            setLoading(true);
+
+            return await createTask({
+                title: params.title,
+                description: params.description,
+            });
+        } catch (e) {
+            console.error("Create task failed", e);
+            throw e;
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return { mutate };
-}
+    return { mutate, loading };
+};
