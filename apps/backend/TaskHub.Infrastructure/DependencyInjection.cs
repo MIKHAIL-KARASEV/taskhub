@@ -7,6 +7,7 @@ using TaskHub.Application.Abstractions;
 using TaskHub.Infrastructure.Persistence;
 using TaskHub.Infrastructure.Repositories;
 using TaskHub.Infrastructure.Security;
+using TaskHub.Infrastructure.Services;
 using TaskHub.Application.Auth;
 
 public static class DependencyInjection
@@ -28,6 +29,7 @@ public static class DependencyInjection
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IUserTaskRepository, UserTaskRepository>();
         services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<IDatabaseMigrator, EfDatabaseMigrator>();
 
         return services;
     }
