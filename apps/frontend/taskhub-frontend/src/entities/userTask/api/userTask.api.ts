@@ -8,16 +8,16 @@ export const createTask = (data: {
     title: string;
     description?: string;
 }) =>
-    request<UserTask>("Generate request in HTTP Client/tasks", {
+    request<UserTask>("/api/userTasks", {
         method: "POST",
         body: JSON.stringify(data),
     });
 
-export const updateTask = (id: string, data: {
-    title: string;
-    description?: string;
-}) =>
-    request(`/api/userTasks/${id}`, {
+export const updateTask = (
+    id: string,
+    data: { title: string; description?: string }
+) =>
+    request<UserTask>(`/api/userTasks/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
     });
