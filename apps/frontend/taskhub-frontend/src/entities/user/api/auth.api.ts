@@ -10,13 +10,19 @@ export interface AuthResponse {
 }
 
 export const login = (dto: LoginDto) =>
-    request<AuthResponse>("/api/auth/login", {
+    request<AuthResponse>("/auth/login", {
         method: "POST",
         body: JSON.stringify(dto),
     });
 
-export const register = (dto: LoginDto) =>
-    request<AuthResponse>("/api/auth/register", {
+export const registerUser = (dto: LoginDto) =>
+    request<{ token: string }>("/auth/register", {
         method: "POST",
         body: JSON.stringify(dto),
     });
+
+// export const register = (dto: LoginDto) =>
+//     request<AuthResponse>("/api/auth/register", {
+//         method: "POST",
+//         body: JSON.stringify(dto),
+//     });
